@@ -11,6 +11,27 @@
 
 #include <Dumper.h>
 
+
+/**
+ * @brief Constructor for Dumper class
+ *
+ * Creates a new Dumper object which dumps the content of the memory region
+ * specified by the @p memory parameter into the file specified by the
+ * @p path parameter.
+ *
+ * If the @p path parameter is empty, the content of the memory region is
+ * dumped into the stdout.
+ *
+ * If the @p path parameter is not empty, the content of the memory region
+ * is dumped into the file specified by the @p path parameter.
+ *
+ * If the file can not be opened, a std::runtime_error is thrown with a
+ * message describing the error.
+ *
+ * @param memory the memory region to dump
+ * @param path the path of the file to dump the memory region. If empty, the
+ * memory region is dumped into the stdout.
+ */
 Dumper::Dumper(Memory &&memory, const std::string &path) : m_memory(std::move(memory)), m_path(path)
 {
 
@@ -30,6 +51,14 @@ Dumper::Dumper(Memory &&memory, const std::string &path) : m_memory(std::move(me
     }
 }
 
+/**
+ * @brief Destructor for Dumper class
+ *
+ * Closes the file descriptor of the file used to dump the memory region.
+ *
+ * If the file descriptor is not valid (i.e. it is equal to STDOUT_FILENO), the
+ * destructor does nothing.
+ */
 Dumper::~Dumper()
 {
     if (fd > 0 || fd != STDOUT_FILENO)
@@ -38,6 +67,21 @@ Dumper::~Dumper()
     }
 }
 
+
+
+/**
+ * @brief Dumps the memory region into a file or stdout.
+ *
+ * If the file descriptor of the file used to dump the memory region is valid
+ * (i.e. it is not equal to STDOUT_FILENO), the function dumps the memory region
+ * into the file specified by the file descriptor. Otherwise, the function dumps
+ * the memory region into the stdout.
+ *
+ * If the memory region can not be read, a std::runtime_error is thrown with a
+ * message describing the error.
+ *
+ * @return 0 if the memory region has been successfully dumped, -1 otherwise.
+ */
 int Dumper::dump()
 {
     /*Read from memory to vector*/

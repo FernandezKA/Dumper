@@ -6,7 +6,7 @@
 
 int main(int argc, char *argv[])
 {   
-    if(argc < 3){
+    if(argc < 4){
         std::cout << "Usage: " << argv[0] << " <base_addr> <length> <path to the log file>" << std::endl;
         return -1;
     }
